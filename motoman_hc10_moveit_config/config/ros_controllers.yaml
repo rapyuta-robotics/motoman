@@ -22,9 +22,19 @@ joint_state_controller:
   type: joint_state_controller/JointStateController
   publish_rate: 50
 controller_list:
-  []
-arm_position_controller:
-  type: position_controllers/JointPositionController
+  - name: arm_robot_trajectory_controller
+    action_ns: follow_joint_trajectory
+    type: FollowJointTrajectory
+    default: true
+    joints:
+      - joint_1_s
+      - joint_2_l
+      - joint_3_u
+      - joint_4_r
+      - joint_5_b
+      - joint_6_t
+arm_robot_trajectory_controller:
+  type: effort_controllers/JointTrajectoryController
   joints:
     - joint_1_s
     - joint_2_l
