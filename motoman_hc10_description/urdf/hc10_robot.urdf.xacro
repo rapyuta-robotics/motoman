@@ -1,0 +1,31 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://wiki.ros.org/xacro" name="motoman_hc10">
+
+
+  <xacro:arg name="transmission_hw_interface" default="hardware_interface/PositionJointInterface"/>
+  <xacro:arg name="prefix" default=""/>
+
+  <xacro:include filename="$(find motoman_hc10_description)/urdf/common.gazebo.xacro" />
+
+
+  <!-- transimission -->
+  <xacro:include filename="$(find motoman_hc10_description)/urdf/hc10.transmission.xacro" />
+  <xacro:hc10_transmission prefix="$(arg prefix)" hw_interface="$(arg transmission_hw_interface)" />
+
+  <xacro:include filename="$(find motoman_hc10_description)/urdf/hc10.gazebo.xacro" />
+  <xacro:hc10_gazebo prefix="$(arg prefix)" />
+
+  <!-- hc10 -->
+  <xacro:include filename="$(find motoman_hc10_description)/urdf/hc10_macro.xacro" />
+  <xacro:motoman_hc10 prefix="$(arg prefix)"/>
+
+
+  <link name="world" />
+
+  <joint name="world_joint" type="fixed">
+    <parent link="world" />
+    <child link = "base_link" />
+    <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0" />
+  </joint>
+
+</robot>
