@@ -9,11 +9,12 @@
 <launch>
   <arg name="sim" default="true"/>
   
-  <arg name="gazebo" default="true"/>
+  <arg name="gazebo" default="false"/>
   <arg name="gazebo_gui" default="true"/>
   <arg name="gazebo_paused" default="false"/>
   
-  <arg name="fake_execution" default="true" />
+  <!-- TODO: fake execution should be true only when gazebo==false and sim==false -->
+  <arg name="fake_execution" default="true" />     
   <arg name="debug" default="false"/>
   <arg name="info" default="false"/>
   <arg name="use_gui" default="false"/>
@@ -75,7 +76,6 @@
   <group if="$(arg sim)">
     <group unless="$(arg gazebo)">
       <!-- We do not have a robot connected, so publish fake joint states -->
-      <param name="fake_execution" value="false"/>
       <node name="joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher">
         <param name="use_gui" value="$(arg use_gui)"/>
         <rosparam param="source_list">[move_group/fake_controller_joint_states]</rosparam>
@@ -94,12 +94,15 @@
 
   <!-- Run the main MoveIt! executable without trajectory execution (we do not have controllers configured by default) -->
   <remap if="$(arg gazebo)" from="/follow_joint_trajectory" to="/arm_controller/follow_joint_trajectory"/>
+
+  
   <include file="$(find motoman_hc10_moveit_config)/launch/move_group.launch">
     <arg name="allow_trajectory_execution" value="true"/>
     <arg name="fake_execution" value="$(arg fake_execution)"/>
     <arg name="info" value="$(arg info)"/>
     <arg name="debug" value="$(arg debug)"/>
   </include>
+
 
   <!-- If needed, broadcast static tf for robot root -->
   <node pkg="tf" type="static_transform_publisher" name="virtual_joint_broadcaster_0" args="0 0 0 0 0 0 world motoman_hc10 100" />
