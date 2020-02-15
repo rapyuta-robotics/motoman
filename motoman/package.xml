@@ -33,6 +33,8 @@
   <exec_depend>motoman_sia20d_moveit_config</exec_depend>
   <exec_depend>motoman_sia20d_support</exec_depend>
   <exec_depend>motoman_sia5d_support</exec_depend>
+  <exec_depend>motoman_hc10_support</exec_depend>
+  <exec_depend>motoman_hc10_moveit_config</exec_depend>
 
   <export>
     <metapackage/>
