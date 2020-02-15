@@ -1,4 +1,5 @@
 <launch>
+  <arg name="robot_name" default="" />
 
   <!-- GDB Debug Option -->
   <arg name="debug" default="false" />
@@ -53,6 +54,7 @@
     <arg name="moveit_manage_controllers" value="true" />
     <arg name="moveit_controller_manager" value="motoman_hc10" unless="$(arg fake_execution)"/>
     <arg name="moveit_controller_manager" value="fake" if="$(arg fake_execution)"/>
+    <arg name="robot_name" value="$(arg robot_name)" />
   </include>
 
   <!-- Sensors Functionality -->

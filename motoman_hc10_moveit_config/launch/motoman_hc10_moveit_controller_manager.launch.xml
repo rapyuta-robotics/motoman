@@ -1,4 +1,5 @@
 <launch>
+  <arg name="robot_name" default="" />
 
   <!-- loads moveit_controller_manager on the parameter server which is taken as argument 
     if no argument is passed, moveit_simple_controller_manager will be set -->
@@ -7,4 +8,6 @@
 
   <!-- loads ros_controllers to the param server -->
   <rosparam file="$(find motoman_hc10_moveit_config)/config/ros_controllers.yaml"/>
+  <node name="add_namespace_to_controller_list" pkg="ur_robotiq_moveit_config" type="add_namespace_to_controller_list.py" respawn="false" output="screen" args="$(arg robot_name)" if="$(eval arg('robot_name') != '' )" />
+
 </launch>
