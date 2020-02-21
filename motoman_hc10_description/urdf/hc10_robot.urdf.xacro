@@ -7,6 +7,7 @@
 
   <xacro:include filename="$(find motoman_hc10_description)/urdf/common.gazebo.xacro" />
 
+  <link name="world" />
 
   <!-- transimission -->
   <xacro:include filename="$(find motoman_hc10_description)/urdf/hc10.transmission.xacro" />
@@ -17,15 +18,11 @@
 
   <!-- hc10 -->
   <xacro:include filename="$(find motoman_hc10_description)/urdf/hc10_macro.xacro" />
-  <xacro:motoman_hc10 prefix="$(arg prefix)"/>
+  <xacro:motoman_hc10 prefix="$(arg prefix)" parent="world">
+    <origin xyz="0 0 0" rpy="0 0 0" />
+  </xacro:motoman_hc10>
 
 
-  <link name="world" />
 
-  <joint name="world_joint" type="fixed">
-    <parent link="world" />
-    <child link = "base_link" />
-    <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0" />
-  </joint>
 
 </robot>

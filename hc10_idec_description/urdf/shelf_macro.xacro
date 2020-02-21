@@ -1,0 +1,47 @@
+<?xml version="1.0" ?>
+<robot xmlns:xacro="http://ros.org/wiki/xacro">
+  
+   <!-- TODO: Inertial of hc10 is not opened by Yaskawa so the following inertial was set tentatively -->
+   <xacro:macro name="tentative_inertial">
+    <inertial>
+          <mass value="10.0" />
+          <inertia ixx="0.03" iyy="0.03" izz="0.03" ixy="0.0" ixz="0.0" iyz="0.0" />
+    </inertial>
+  </xacro:macro>
+  
+  <xacro:macro name="shelf" params="prefix parent *origin">
+  
+    <material name="shelf_white">
+        <color rgba="1.0 1.0 1.0 2.0"/>
+    </material>
+
+
+
+  <!-- link list -->
+  <link name="${prefix}shelf_link">
+     <visual>
+       <geometry>
+         <mesh filename="package://hc10_idec_description/mesh/shelf.stl" />
+       </geometry>
+       <origin xyz="0 0 0" rpy="0 0 0"/>
+         <material name="shelf_white"/>
+     </visual>
+     <collision>
+       <geometry>
+         <mesh filename="package://hc10_idec_description/mesh/shelf_without_work.stl" />
+       </geometry>
+     </collision>
+     <xacro:tentative_inertial/>
+   </link>
+    <!-- end of link list -->
+
+    <!-- joint list -->
+    <joint name="${prefix}shelf_joint" type="fixed">
+      <parent link="${parent}"/>
+      <child link="${prefix}shelf_link"/>
+      <xacro:insert_block name="origin"/>
+      <axis xyz="0 0 1" />
+    </joint>
+
+  </xacro:macro>
+</robot>

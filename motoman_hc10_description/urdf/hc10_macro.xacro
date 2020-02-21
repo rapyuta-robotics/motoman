@@ -9,7 +9,15 @@
     </inertial>
   </xacro:macro>
   
-  <xacro:macro name="motoman_hc10" params="prefix">
+  <xacro:macro name="motoman_hc10" params="prefix parent *origin 
+    joint_1_s_lower_limit:=${-pi}    joint_1_s_upper_limit:=${pi}
+    joint_2_l_lower_limit:=${-pi}    joint_2_l_upper_limit:=${pi}
+    joint_3_u_lower_limit:=${-pi}    joint_3_u_upper_limit:=${pi}
+    joint_4_r_lower_limit:=${-pi}    joint_4_r_upper_limit:=${pi}
+    joint_5_b_lower_limit:=${-pi}    joint_5_b_upper_limit:=${pi}
+    joint_6_t_lower_limit:=${-pi}    joint_6_t_upper_limit:=${pi}
+    safety_limits:=false safety_pos_margin:=${radians(10.0)}
+    safety_k_position:=20">
 
     <!-- Properties -->
     <material name="yaskawa_blue">
@@ -121,12 +129,22 @@
     <!-- end of link list -->
 
     <!-- joint list -->
+    <joint name="${prefix}joint_base" type="fixed">
+      <parent link="${parent}"/>
+      <child link="${prefix}base_link"/>
+      <xacro:insert_block name="origin"/>
+      <axis xyz="0 0 1" />
+    </joint>
     <joint name="${prefix}joint_1_s" type="revolute">
       <parent link="${prefix}base_link"/>
       <child link="${prefix}link_1_s"/>
       <origin xyz="0 0 0.275" rpy="0 0 0" />
       <axis xyz="0 0 1" />
       <limit lower="${radians(-180)}" upper="${radians(180)}" effort="368.48" velocity="${radians(130)}"/>
+      <xacro:if value="${safety_limits}">
+        <safety_controller soft_lower_limit="${joint_1_s_lower_limit + safety_pos_margin}" soft_upper_limit="${joint_1_s_upper_limit - safety_pos_margin}" k_position="${safety_k_position}" k_velocity="0.0"/>
+      </xacro:if>
+      <dynamics damping="0.0" friction="0.0"/>
     </joint>
     <joint name="${prefix}joint_2_l" type="revolute">
       <parent link="${prefix}link_1_s"/>
@@ -134,13 +152,19 @@
       <origin xyz="0 0 0" rpy="0 0 0" />
       <axis xyz="0 1 0" />
       <limit lower="${radians(-180)}" upper="${radians(180)}" effort="368.48" velocity="${radians(130)}"/>
+      <xacro:if value="${safety_limits}">
+        <safety_controller soft_lower_limit="${joint_2_l_lower_limit + safety_pos_margin}" soft_upper_limit="${joint_2_l_upper_limit - safety_pos_margin}" k_position="${safety_k_position}" k_velocity="0.0"/>
+      </xacro:if>
     </joint>
     <joint name="${prefix}joint_3_u" type="revolute">
       <parent link="${prefix}link_2_l"/>
       <child link="${prefix}link_3_u"/>
-      <origin xyz="0 0 0.700" rpy="0 0 0" />
+      <origin xyz="0 0 0.700" rpy="0 0  0" />
       <axis xyz="0 -1 0" />
       <limit lower="${radians(-5)}" upper="${radians(355)}" effort="141.12" velocity="${radians(180)}"/>
+      <xacro:if value="${safety_limits}">
+        <safety_controller soft_lower_limit="${joint_3_u_lower_limit + safety_pos_margin}" soft_upper_limit="${joint_3_u_upper_limit - safety_pos_margin}" k_position="${safety_k_position}" k_velocity="0.0"/>
+      </xacro:if>
     </joint>
     <joint name="${prefix}joint_4_r" type="revolute">
       <parent link="${prefix}link_3_u"/>
@@ -148,6 +172,9 @@
       <origin xyz="0 0 -0.500" rpy="0 0 0" />
       <axis xyz="0 0 1" />
       <limit lower="${radians(-180)}" upper="${radians(180)}" effort="39.20" velocity="${radians(180)}"/>
+      <xacro:if value="${safety_limits}">
+        <safety_controller soft_lower_limit="${joint_4_r_lower_limit + safety_pos_margin}" soft_upper_limit="${joint_4_r_upper_limit - safety_pos_margin}" k_position="${safety_k_position}" k_velocity="0.0"/>
+      </xacro:if>
     </joint>
     <joint name="${prefix}joint_5_b" type="revolute">
       <parent link="${prefix}link_4_r"/>
@@ -155,6 +182,9 @@
       <origin xyz="0 0.162 0" rpy="0 0 0" />
       <axis xyz="0 -1 0" />
       <limit lower="${radians(-180)}" upper="${radians(180)}" effort="31.36" velocity="${radians(250)}"/>
+      <xacro:if value="${safety_limits}">
+        <safety_controller soft_lower_limit="${joint_5_b_lower_limit + safety_pos_margin}" soft_upper_limit="${joint_5_b_upper_limit - safety_pos_margin}" k_position="${safety_k_position}" k_velocity="0.0"/>
+      </xacro:if>
     </joint>
     <joint name="${prefix}joint_6_t" type="revolute">
       <parent link="${prefix}link_5_b"/>
@@ -162,6 +192,9 @@
       <origin xyz="0 0 0" rpy="0 0 0" />
       <axis xyz="0 0 1" />
       <limit lower="${radians(-180)}" upper="${radians(180)}" effort="31.36" velocity="${radians(250)}"/>
+      <xacro:if value="${safety_limits}">
+        <safety_controller soft_lower_limit="${joint_6_t_lower_limit + safety_pos_margin}" soft_upper_limit="${joint_6_t_upper_limit - safety_pos_margin}" k_position="${safety_k_position}" k_velocity="0.0"/>
+      </xacro:if>
     </joint>
     <joint name="${prefix}joint_6_t-tool0" type="fixed">
       <origin xyz="0 0 -0.130" rpy="${pi} 0 0"/>
