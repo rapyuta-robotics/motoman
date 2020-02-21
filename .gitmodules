@@ -1,0 +1,3 @@
+[submodule "idec_kompose"]
+	path = idec_kompose
+	url = https://github.com/rapyuta-robotics/idec_kompose.git
